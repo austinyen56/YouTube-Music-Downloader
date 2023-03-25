@@ -9,6 +9,7 @@
 
 import os
 import sys
+import platform
 
 url = str(input("Enter URL: ")).split("&ab_channel")[0]
 # Can change --audio-format to wav if needed
@@ -29,9 +30,16 @@ def windows():
     return cmd
 
 def linux():
+    if platform.system() == 'Linux' and os.path.exists('/mnt/c/'):
+        print('WSL')
+        output_dir = os.path.join(os.path.expanduser("~"), "/mnt/c/Users/Austin/Desktop/ytdownloader")
+    else:
+        print('Actual Ubuntu machine')
+        output_dir = os.path.join(os.path.expanduser("~"), "Desktop/ytdownloader")
+
     while True:
         fmt = str(input("In what format (flac/wav/mp3[support thumbnail embedding]): "))
-        output_dir = os.path.join(os.path.expanduser("~"), "/mnt/c/Users/Austin/Desktop/ytdownloader")
+        
         if fmt == "wav" or fmt == "flac":
             cmd = f"yt-dlp -i -x --audio-format {fmt} --audio-quality 0 -o '{output_dir}/%(title)s.%(ext)s'"
             break
